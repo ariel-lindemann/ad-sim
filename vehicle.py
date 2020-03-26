@@ -2,9 +2,10 @@ import numpy as np
 
 
 class Car:
-    def __init__(self, wheel_base=1.5, start_pos=[0, 0], orientation=0):
-        self.x_p = start_pos[0]
-        self.y_p = start_pos[1]
+    def __init__(self, wheel_base=1.5, orientation=0):
+       
+        self.x_p = 0
+        self.y_p = 0
         self.angle_p = 0
         self.st_angle_p = 0
         self.v_p = 0
@@ -28,3 +29,8 @@ class Car:
         self.angle_p = self.v * np.tan(self.st_angle) / self.wheel_base
         self.st_angle_p = st_angle_p
         self.v_p = v_p
+
+    def take_inputs(self, gas=0, brake=0, st_wheel_chg=0):
+        c = - 0.25
+        self.v_p = (gas - brake) * c * self.v ** 2
+        self.st_angle_p = st_wheel_chg
