@@ -23,7 +23,7 @@ class Car:
         # NOTE:timestep klein genug für lekradverlauf?
         self.st_angle += self.st_angle_p
         self.orientation += (self.v * np.tan(self.st_angle) /
-                       self.wheel_base) * timestep
+                             self.wheel_base) * timestep
 
         self.x_p = self.v * np.cos(self.orientation)
         self.y_p = self.v * np.cos(self.orientation)
@@ -33,9 +33,13 @@ class Car:
     def gen_acc(self, gas, v_max=160*3.6, a_max=7.5):
         return -((4*a_max)/(v_max**2)) * gas * self.v**2 + ((4*a_max)/v_max)*self.v
 
-    def take_inputs(self, gas=0, brake=0, st_wheel_chg=0):
+    def take_inputs(self, gas=0, brake=0, st_wheel_chg=0, inputs=None):
         #acc = self.gen_acc(gas)
+        if inputs:
+            gas = inputs[0]
+            brake = inputs[1]
+            st_wheel_chg = inputs[2]
+
         acc = gas
         self.v_p = acc*(1-brake)
         self.st_angle_p = st_wheel_chg
-
