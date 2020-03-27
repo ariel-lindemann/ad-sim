@@ -12,7 +12,7 @@ class Car:
         self.v_p = 0
 
         self.v = 0
-        self.angle = orientation
+        self.orientation = orientation
         self.st_angle = 0
 
         self.wheel_base = wheel_base
@@ -22,11 +22,11 @@ class Car:
         self.v += self.v_p * timestep
         # NOTE:timestep klein genug für lekradverlauf?
         self.st_angle += self.st_angle_p
-        self.angle += (self.v * np.tan(self.st_angle) /
+        self.orientation += (self.v * np.tan(self.st_angle) /
                        self.wheel_base) * timestep
 
-        self.x_p = self.v * np.cos(self.angle)
-        self.y_p = self.v * np.cos(self.angle)
+        self.x_p = self.v * np.cos(self.orientation)
+        self.y_p = self.v * np.cos(self.orientation)
         self.angle_p = self.v * np.tan(self.st_angle) / self.wheel_base
 
     # TODO sensible output
