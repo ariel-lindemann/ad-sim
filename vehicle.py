@@ -1,13 +1,36 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 
 class Car:
-    def __init__(self, wheel_base=1.5, orientation=0):
+    '''Single-Track model of a car.
 
+    Attributes
+    ----------
+    x_p : float
+        x-axis component of `v`.
+    y_p : float
+        y-axis component of `v``.
+    ori_p : float
+        Change in orientation in radians.
+    st_angle_p : float
+        Change in steering angle in radians.
+    v_p : float
+        Change in velocity i.e. acceleration.
+    v : float
+        Current car velocity.
+    orientation : float
+        Orientation (theta) in radians.
+    st_angle : float
+        Steering angle (phi) in radians.
+    wheel_base : float
+        Vehicle wheel base i.e. distance between front and rear wheels
+    '''
+    def __init__(self, wheel_base=1.5, orientation=0):
         self.x_p = 0
         self.y_p = 0
-        self.angle_p = 0
+        self.ori_p = 0
         self.st_angle_p = 0
         self.v_p = 0
 
@@ -27,7 +50,7 @@ class Car:
 
         self.x_p = self.v * np.cos(self.orientation)
         self.y_p = self.v * np.cos(self.orientation)
-        self.angle_p = self.v * np.tan(self.st_angle) / self.wheel_base
+        self.ori_p = self.v * np.tan(self.st_angle) / self.wheel_base
 
     # TODO sensible output
     def gen_acc(self, gas, v_max=160*3.6, a_max=7.5):
