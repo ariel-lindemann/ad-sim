@@ -57,7 +57,7 @@ class Car:
                              self.wheel_base) * timestep
 
         self.x_p = self.v * np.cos(self.orientation)
-        self.y_p = self.v * np.cos(self.orientation)
+        self.y_p = self.v * np.sin(self.orientation)
         self.ori_p = self.v * np.tan(self.st_angle) / self.wheel_base
 
         self.adj_angles()
