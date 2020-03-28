@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import math
+from math import pi
 
 
 class Car:
@@ -27,6 +27,7 @@ class Car:
     wheel_base : float
         Vehicle wheel base i.e. distance between front and rear wheels
     '''
+
     def __init__(self, wheel_base=1.5, orientation=0):
         self.x_p = 0
         self.y_p = 0
@@ -35,10 +36,17 @@ class Car:
         self.v_p = 0
 
         self.v = 0
-        self.orientation = orientation
+        self.orientation = orientation % (2 * pi)
         self.st_angle = 0
 
         self.wheel_base = wheel_base
+
+    def adj_angles(self):
+        '''Prevent angles from exceeding 2*pi or 360°.'''
+        all_angles = [self.ori_p, self.st_angle_p,
+                      self.orientation, self.st_angle]
+        for a in all_angles:
+            a = a % (2*pi)
 
     def update(self, timestep=1):
 
@@ -51,6 +59,8 @@ class Car:
         self.x_p = self.v * np.cos(self.orientation)
         self.y_p = self.v * np.cos(self.orientation)
         self.ori_p = self.v * np.tan(self.st_angle) / self.wheel_base
+
+        self.adj_angles()
 
     # TODO sensible output
     def gen_acc(self, gas, v_max=160*3.6, a_max=7.5):
