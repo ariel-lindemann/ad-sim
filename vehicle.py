@@ -76,3 +76,39 @@ class Car:
         acc = gas
         self.v_p = acc*(1-brake)
         self.st_angle_p = st_wheel_chg
+
+    def next_pos(self, pos=[0, 0], inputs=[0, 0, 0],  t_s=1):
+        ''' Returns coordinates of Car after specified timestep based on given inputs'''
+
+        pos_x = pos[0]
+        pos_y = pos[1]
+
+        gas, brake, st_wheel_chg = inputs
+
+        self.take_inputs(gas, brake, st_wheel_chg)
+        self.update(timestep=t_s)
+
+        pos_x += self.x_p
+        pos_y += self.y_p
+
+        return pos_x, pos_y
+
+    def get_trajectory(self, input_series, starting_pos=[0, 0], total_time=100,  t_s=1):
+        ''' Returns series of posisions based on a series of inputs'''
+
+        all_x = []
+        all_y = []
+
+        pos_x = starting_pos[0]
+        pos_y = starting_pos[1]
+
+        for i in range(total_time):
+
+            if len(input_series) >= i:
+                gas, brake, st_wheel_chg = input_series.pop(0)
+
+            pos_x, pos_y = self.next_pos([pos_x, pos_y], [gas, brake, st_wheel_chg], t_s)
+            all_x.append(pos_x)
+            all_y.append(pos_y)
+
+        return all_x, all_y
