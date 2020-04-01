@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from math import pi
+import math
 
 
 class Car:
@@ -26,9 +26,11 @@ class Car:
         Steering angle (phi) in radians.
     wheel_base : float
         Vehicle wheel base i.e. distance between front and rear wheels
+    input_buffer : list
+        Stores gas, break and steering wheel cange inputs.
     '''
 
-    def __init__(self, wheel_base=1.5, orientation=0):
+    def __init__(self, wheel_base=1.5, orientation=0, inputs = None):
         self.x_p = 0
         self.y_p = 0
         self.ori_p = 0
@@ -36,18 +38,37 @@ class Car:
         self.v_p = 0
 
         self.v = 0
-        self.orientation = orientation % (2 * pi)
+        self.orientation = orientation % (2 * math.pi)
         self.st_angle = 0
 
         self.wheel_base = wheel_base
+
+        if inputs:
+            self.input_buffer = inputs
+        else:
+            self.input_buffer = []
 
     def adj_angles(self):
         '''Prevent angles from exceeding 2*pi or 360°.'''
         all_angles = [self.ori_p, self.st_angle_p,
                       self.orientation, self.st_angle]
         for a in all_angles:
-            a = a % (2*pi)
+            a = a % (2*math.pi)
 
+    def load_inputs(self, file = None, in_list = None):
+        
+        if file:
+            in_file = open(file)
+
+            for line in in_file:
+                self.input_buffer.append(line.split(',', 3))
+
+            in_file.close()
+
+        elif in_list:
+            self.input_buffer.append(in_list)
+    
+    
     def update(self, timestep=1):
 
         self.v += self.v_p * timestep
@@ -66,14 +87,21 @@ class Car:
     def gen_acc(self, gas, v_max=160*3.6, a_max=7.5):
         return -((4*a_max)/(v_max**2)) * gas * self.v**2 + ((4*a_max)/v_max)*self.v
 
-    def take_inputs(self, gas=0, brake=0, st_wheel_chg=0, inputs=None):
+    def take_next_inputs(self, gas=0, brake=0, st_wheel_chg=0, inputs_l=None):
+        ''' Takes inputs as values or reads them from a list'''
         #acc = self.gen_acc(gas)
-        if inputs:
-            gas = inputs[0]
-            brake = inputs[1]
-            st_wheel_chg = inputs[2]
 
-        acc = gas
+        #TODO option to set inputs to 0 if no new inputs
+        if inputs_l:
+            gas, brake, st_wheel_chg = inputs_l.pop(0)
+            
+        gas = float(gas)
+        brake = float(brake)
+        st_wheel_chg = float(st_wheel_chg)
+        st_wheel_chg = math.radians(st_wheel_chg)
+
+
+        acc = gas                       #NOTE temporary
         self.v_p = acc*(1-brake)
         self.st_angle_p = st_wheel_chg
 
@@ -85,7 +113,7 @@ class Car:
 
         gas, brake, st_wheel_chg = inputs
 
-        self.take_inputs(gas, brake, st_wheel_chg)
+        self.take_next_inputs(gas, brake, st_wheel_chg)
         self.update(timestep=t_s)
 
         pos_x += self.x_p
@@ -102,9 +130,14 @@ class Car:
         pos_x = starting_pos[0]
         pos_y = starting_pos[1]
 
+        if isinstance(input_series, str):
+            self.load_inputs(input_series)
+            input_series = self.input_buffer
+
+
         for i in range(total_time):
 
-            if len(input_series) >= i:
+            if len(input_series) >= i:                              #TODO maybe > instead of >=
                 gas, brake, st_wheel_chg = input_series.pop(0)
 
             pos_x, pos_y = self.next_pos([pos_x, pos_y], [gas, brake, st_wheel_chg], t_s)
