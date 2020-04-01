@@ -30,7 +30,7 @@ class Car:
         Stores gas, break and steering wheel cange inputs.
     '''
 
-    def __init__(self, wheel_base=1.5, orientation=0, inputs = None):
+    def __init__(self, wheel_base=1.5, orientation=0, inputs=None):
         self.x_p = 0
         self.y_p = 0
         self.ori_p = 0
@@ -55,8 +55,8 @@ class Car:
         for a in all_angles:
             a = a % (2*math.pi)
 
-    def load_inputs(self, file = None, in_list = None):
-        
+    def load_inputs(self, file=None, in_list=None):
+        ''' Load inputs either from file or from array'''
         if file:
             in_file = open(file)
 
@@ -67,10 +67,9 @@ class Car:
 
         elif in_list:
             self.input_buffer.append(in_list)
-    
-    
-    def update(self, timestep=1):
 
+    def update(self, timestep=1):
+        ''' Update location, speed and orientation'''
         self.v += self.v_p * timestep
         # NOTE:timestep klein genug für lekradverlauf?
         self.st_angle += self.st_angle_p
@@ -91,17 +90,15 @@ class Car:
         ''' Takes inputs as values or reads them from a list'''
         #acc = self.gen_acc(gas)
 
-        #TODO option to set inputs to 0 if no new inputs
+        # TODO option to set inputs to 0 if no new inputs
         if inputs_l:
             gas, brake, st_wheel_chg = inputs_l.pop(0)
-            
+
         gas = float(gas)
         brake = float(brake)
         st_wheel_chg = float(st_wheel_chg)
         st_wheel_chg = math.radians(st_wheel_chg)
-
-
-        acc = gas                       #NOTE temporary
+        acc = gas  # NOTE temporary
         self.v_p = acc*(1-brake)
         self.st_angle_p = st_wheel_chg
 
@@ -134,13 +131,13 @@ class Car:
             self.load_inputs(input_series)
             input_series = self.input_buffer
 
-
         for i in range(total_time):
 
-            if len(input_series) >= i:                              #TODO maybe > instead of >=
+            if len(input_series) >= i:  # TODO maybe > instead of >=
                 gas, brake, st_wheel_chg = input_series.pop(0)
 
-            pos_x, pos_y = self.next_pos([pos_x, pos_y], [gas, brake, st_wheel_chg], t_s)
+            pos_x, pos_y = self.next_pos([pos_x, pos_y],
+                                         [gas, brake, st_wheel_chg], t_s)
             all_x.append(pos_x)
             all_y.append(pos_y)
 
