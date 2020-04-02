@@ -65,13 +65,13 @@ class Car:
             in_file.close()
 
         elif in_list:
-            self.input_buffer.append(in_list)
+            self.input_buffer += (in_list)
 
     def update(self, timestep=1):
         ''' Update location, speed and orientation'''
         self.v += self.v_p * timestep
         # NOTE:timestep klein genug für lekradverlauf?
-        self.st_angle += self.st_angle_p
+        self.st_angle += self.st_angle_p    # NOTE timestep needed?
         self.orientation += (self.v * np.tan(self.st_angle) /
                              self.wheel_base) * timestep
 
