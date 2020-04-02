@@ -1,12 +1,17 @@
 import numpy as np
 import math
 
+from body import Body
 
-class Car:
+class Car(Body):
     '''Single-Track model of a car.
 
     Attributes
     ----------
+    length : float
+        Car length in meters.
+    width : float
+        Car width in meters.
     x_p : float
         x-axis component of `v`.
     y_p : float
@@ -29,7 +34,11 @@ class Car:
         Stores gas, break and steering wheel cange inputs.
     '''
 
-    def __init__(self, wheel_base=1.5, orientation=0, inputs=None):
+    def __init__(self, dimensions = [4.95, 1.85], wheel_base=2.95, orientation=0, inputs=None):
+        
+        self.length = dimensions[0]
+        self.width =  dimensions[1]
+        
         self.x_p = 0
         self.y_p = 0
         self.ori_p = 0
