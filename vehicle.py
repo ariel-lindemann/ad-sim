@@ -127,10 +127,11 @@ class Car(Body):
         return pos_x, pos_y
 
     def get_trajectory(self, input_series, starting_pos=[0, 0], total_time=100,  t_s=1):
-        ''' Returns series of posisions based on a series of inputs'''
+        ''' Returns series of states (position and orientation) based on a series of inputs'''
 
         all_x = []
         all_y = []
+        all_ori = []
 
         pos_x = starting_pos[0]
         pos_y = starting_pos[1]
@@ -148,5 +149,6 @@ class Car(Body):
                                          [gas, brake, st_wheel_chg], t_s)
             all_x.append(pos_x)
             all_y.append(pos_y)
+            all_ori.append(self.orientation)
 
-        return all_x, all_y
+        return all_x, all_y, all_ori
