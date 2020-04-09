@@ -1,4 +1,8 @@
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+import matplotlib.patches as mpatches
+import numpy as np
+
 import vehicle
 
 from matplotlib.animation import FuncAnimation
@@ -6,7 +10,7 @@ from matplotlib.animation import FuncAnimation
 
 def display_trajectory(car, input_series, starting_pos=[0, 0],
                        TOTAL_TIME=100,  t_s=1):
-    all_x, all_y = car.get_trajectory(input_series, starting_pos,
+    all_x, all_y, = car.get_trajectory(input_series, starting_pos,
                                       TOTAL_TIME, t_s)
     plt.axes(aspect='equal')
 
@@ -16,18 +20,46 @@ def display_trajectory(car, input_series, starting_pos=[0, 0],
 
 def run_sim(car, options, inputs):
 
+    FIGSIZE = options['FIGSIZE']
     TOTAL_TIME = options['TOTAL_TIME']
     TIMESTEP = options['TIMESTEP']
+    X_BOUNDS = options['X_BOUNDS']
+    Y_BOUNDS = options['Y_BOUNDS']
 
-    fig = plt.figure()
-    plt.axes(aspect='equal')
-    ax1 = plt.subplot(1, 1, 1)
+    fig = plt.figure(figsize=FIGSIZE)
+    gs1 = gridspec.GridSpec(8,8)
+    #plt.axes(aspect='equal')
 
-    all_x, all_y = car.get_trajectory(inputs_file, [0, 0],
+
+    #ax = plt.subplot(1, 1, 1)
+    ax = fig.add_subplot(gs1[:8, :8])
+
+
+    plt.xlim(X_BOUNDS)
+    ax.set_ylim(Y_BOUNDS)
+
+    ###
+
+    all_x, all_y, all_ori = car.get_trajectory(inputs_file, [0, 0],
                                       TOTAL_TIME, TIMESTEP)
 
+#    car_width
+    #TODO complete car visualisation
+
+    car_patch = mpatches.Rectangle((0,0), car.length, car.width, car.orientation) #TODO maybe adjust position
+    ax.add_patch(car_patch)
+
+
     def animate(i):
-        ax1.plot(all_x.pop(0), all_y.pop(0), '.')
+        x = all_x.pop(0)
+        y = all_y.pop(0)
+        ori = all_ori.pop(0)
+        
+        #TODO pedals and steering mpatch
+
+        car_patch.set_xy([x, y])
+        car_patch.angle = np.rad2deg(ori)
+        #ax.plot(x, y, '.')
 
     ani = FuncAnimation(fig, animate, frames=TOTAL_TIME,
                         interval=TIMESTEP * 1000)
@@ -39,8 +71,11 @@ def run_sim(car, options, inputs):
 car = vehicle.Car()
 
 options = {}
-options['TOTAL_TIME'] = 100
-options['TIMESTEP'] = 1
+options['FIGSIZE'] = [8, 8]
+options['TOTAL_TIME'] = 1000
+options['TIMESTEP'] = 0.1
+options['X_BOUNDS'] = [-50, 150]
+options['Y_BOUNDS'] = [-50, 150]
 
 inputs_file = 'inputs.csv'
 
