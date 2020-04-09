@@ -142,6 +142,7 @@ class Car(Body):
 
         for i in range(total_time):
 
+            #FIXME IndexError: pop from empty list
             if len(input_series) >= i:  # TODO maybe > instead of >=
                 gas, brake, st_wheel_chg = input_series.pop(0)
 

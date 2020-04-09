@@ -11,7 +11,7 @@ from matplotlib.animation import FuncAnimation
 def display_trajectory(car, input_series, starting_pos=[0, 0],
                        TOTAL_TIME=100,  t_s=1):
     all_x, all_y, = car.get_trajectory(input_series, starting_pos,
-                                      TOTAL_TIME, t_s)
+                                       TOTAL_TIME, t_s)
     plt.axes(aspect='equal')
 
     plt.plot(all_x, all_y, '.')
@@ -27,13 +27,11 @@ def run_sim(car, options, inputs):
     Y_BOUNDS = options['Y_BOUNDS']
 
     fig = plt.figure(figsize=FIGSIZE)
-    gs1 = gridspec.GridSpec(8,8)
-    #plt.axes(aspect='equal')
-
+    gs1 = gridspec.GridSpec(8, 8)
+    # plt.axes(aspect='equal')
 
     #ax = plt.subplot(1, 1, 1)
     ax = fig.add_subplot(gs1[:8, :8])
-
 
     plt.xlim(X_BOUNDS)
     ax.set_ylim(Y_BOUNDS)
@@ -41,12 +39,13 @@ def run_sim(car, options, inputs):
     ###
 
     all_x, all_y, all_ori = car.get_trajectory(inputs_file, [0, 0],
-                                      TOTAL_TIME, TIMESTEP)
+                                               TOTAL_TIME, TIMESTEP)
 
 #    car_width
-    #TODO complete car visualisation
 
-    car_patch = mpatches.Rectangle((0,0), car.length, car.width, car.orientation) #TODO maybe adjust position
+    # TODO maybe adjust position
+    car_patch = mpatches.Rectangle((0, 0), car.length,
+                                   car.width, car.orientation)
     ax.add_patch(car_patch)
 
 
@@ -54,8 +53,8 @@ def run_sim(car, options, inputs):
         x = all_x.pop(0)
         y = all_y.pop(0)
         ori = all_ori.pop(0)
-        
-        #TODO pedals and steering mpatch
+
+        # TODO pedals and steering mpatch
 
         car_patch.set_xy([x, y])
         car_patch.angle = np.rad2deg(ori)
