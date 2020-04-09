@@ -3,6 +3,7 @@ import math
 
 from body import Body
 
+
 class Car(Body):
     '''Single-Track model of a car.
 
@@ -34,11 +35,11 @@ class Car(Body):
         Stores gas, break and steering wheel cange inputs.
     '''
 
-    def __init__(self, dimensions = [4.95, 1.85], wheel_base=2.95, orientation=0, inputs=None):
-        
+    def __init__(self, dimensions=[4.95, 1.85], wheel_base=2.95, orientation=0, inputs=None):
+
         self.length = dimensions[0]
-        self.width =  dimensions[1]
-        
+        self.width = dimensions[1]
+
         self.x_p = 0
         self.y_p = 0
         self.ori_p = 0
@@ -142,7 +143,7 @@ class Car(Body):
 
         for i in range(total_time):
 
-            #FIXME IndexError: pop from empty list
+            # FIXME IndexError: pop from empty list
             if len(input_series) >= i:  # TODO maybe > instead of >=
                 gas, brake, st_wheel_chg = input_series.pop(0)
 
