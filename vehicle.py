@@ -67,7 +67,6 @@ class Car(Body):
             a = a % (2*math.pi)
 
 
-    # TODO test
     def set_goal_state(self, goal_state):
         self.goal_state = goal_state
 
@@ -104,19 +103,19 @@ class Car(Body):
     def gen_acc(self, gas, v_max=160*3.6, a_max=7.5):
         return -((4*a_max)/(v_max**2)) * gas * self.v**2 + ((4*a_max)/v_max)*self.v
 
-    def take_next_inputs(self, gas=0, brake=0, st_wheel_chg=0, inputs_l=None):
+    def take_next_inputs(self, gas=0, brake=0, st_wheel_chg=0, input_series=None):
         ''' Takes inputs as values or reads them from a list'''
         #acc = self.gen_acc(gas)
 
-        # TODO option to set inputs to 0 if no new inputs
-        if inputs_l:
-            gas, brake, st_wheel_chg = inputs_l.pop(0)
+        if input_series:
+            gas, brake, st_wheel_chg = input_series.pop(0)
 
         gas = float(gas)
         brake = float(brake)
         st_wheel_chg = float(st_wheel_chg)
         st_wheel_chg = math.radians(st_wheel_chg)
         acc = gas  # NOTE temporary
+
         self.v_p = acc*(1-brake)
         self.st_angle_p = st_wheel_chg
 

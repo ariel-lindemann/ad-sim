@@ -46,9 +46,10 @@ class TestCar(unittest.TestCase):
         inputs = [[0.75, 0.0, -30]]
         car = vehicle.Car(orientation= 30, inputs=inputs)
 
-        car.take_next_inputs(inputs_l = car.input_buffer)
-        car.update(timestep=1)
-        #self.assertEqual()
+        t_s = 1
+
+        car.take_next_inputs(input_series = car.input_buffer)
+        car.update(timestep=t_s)
 
         # TODO
 
@@ -56,10 +57,24 @@ class TestCar(unittest.TestCase):
         car = vehicle.Car()
 
         inputs = [[-0.5, 0.15, 15]]
-        car.take_next_inputs(inputs_l=inputs)
-        #TODO
+        car.take_next_inputs(input_series=inputs)
         self.assertEqual(inputs, car.input_buffer)
 
+        car.take_next_inputs(input_series=[])
+        self.assertEqual(0, car.st_angle_p)
+
+    def test_next_pos(self):
+        t_s = 1
+        car = vehicle.Car()
+
+        inputs = [0,0,0]
+        pos = [0,0]
+
+        x,y =car.next_pos(pos, inputs, t_s)
+        self.assertEqual(x,0)
+        self.assertEqual(y,0)
+
+        # TODO more general test
 
 if __name__ == '__main__':
     unittest.main()
