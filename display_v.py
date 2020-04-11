@@ -3,9 +3,9 @@ import matplotlib.gridspec as gridspec
 import matplotlib.patches as mpatches
 import numpy as np
 
-import vehicle
-
 from matplotlib.animation import FuncAnimation
+
+import vehicle
 
 
 def display_trajectory(car, input_series, starting_pos=[0, 0],
@@ -18,19 +18,19 @@ def display_trajectory(car, input_series, starting_pos=[0, 0],
     plt.show()
 
 
-def run_sim(car, options, inputs):
+def run_sim(car, OPTIONS, INPUTS_FILE):
 
-    FIGSIZE = options['FIGSIZE']
-    TOTAL_TIME = options['TOTAL_TIME']
-    TIMESTEP = options['TIMESTEP']
-    X_BOUNDS = options['X_BOUNDS']
-    Y_BOUNDS = options['Y_BOUNDS']
+    FIGSIZE = OPTIONS['FIGSIZE']
+    TOTAL_TIME = OPTIONS['TOTAL_TIME']
+    TIMESTEP = OPTIONS['TIMESTEP']
+    X_BOUNDS = OPTIONS['X_BOUNDS']
+    Y_BOUNDS = OPTIONS['Y_BOUNDS']
 
     fig = plt.figure(figsize=FIGSIZE)
     gs1 = gridspec.GridSpec(8, 8)
     # plt.axes(aspect='equal')
 
-    #ax = plt.subplot(1, 1, 1)
+    # ax = plt.subplot(1, 1, 1)
     ax = fig.add_subplot(gs1[:8, :8])
 
     plt.xlim(X_BOUNDS)
@@ -38,7 +38,7 @@ def run_sim(car, options, inputs):
 
     ###
 
-    trajectory = car.get_trajectory(inputs_file, [0, 0],
+    trajectory = car.get_trajectory(INPUTS_FILE, [0, 0],
                                     TOTAL_TIME, TIMESTEP)
 
     # TODO maybe adjust position
@@ -54,7 +54,6 @@ def run_sim(car, options, inputs):
 
         car_patch.set_xy([x, y])
         car_patch.angle = np.rad2deg(ori)
-        #ax.plot(x, y, '.')
 
     ani = FuncAnimation(fig, animate, frames=TOTAL_TIME,
                         interval=TIMESTEP * 1000)
@@ -65,14 +64,14 @@ def run_sim(car, options, inputs):
 
 car = vehicle.Car()
 
-options = {}
-options['FIGSIZE'] = [8, 8]
-options['TOTAL_TIME'] = 1000
-options['TIMESTEP'] = 0.1
-options['X_BOUNDS'] = [-50, 150]
-options['Y_BOUNDS'] = [-50, 150]
+OPTIONS = {}
+OPTIONS['FIGSIZE'] = [8, 8]
+OPTIONS['TOTAL_TIME'] = 1000
+OPTIONS['TIMESTEP'] = 0.1
+OPTIONS['X_BOUNDS'] = [-50, 150]
+OPTIONS['Y_BOUNDS'] = [-50, 150]
 
-inputs_file = 'inputs.csv'
+INPUTS_FILE = 'inputs.csv'
 
-#display_trajectory(car, inputs_file, [0, 0], TOTAL_TIME, TIMESTEP)
-run_sim(car, options, inputs_file)
+# display_trajectory(car, inputs_file, [0, 0], TOTAL_TIME, TIMESTEP)
+run_sim(car, OPTIONS, INPUTS_FILE)

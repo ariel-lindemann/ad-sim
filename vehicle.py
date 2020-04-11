@@ -1,5 +1,5 @@
-import numpy as np
 import math
+import numpy as np
 
 from body import Body
 
@@ -36,6 +36,8 @@ class Car(Body):
     '''
 
     def __init__(self, dimensions=[4.95, 1.85], wheel_base=2.95, orientation=0, inputs=None):
+        # TODO super-init-not-called
+        # TODO CODE QUALITY: change number of instance attributes
 
         self.length = dimensions[0]
         self.width = dimensions[1]
@@ -47,7 +49,7 @@ class Car(Body):
         self.v_p = 0
 
         self.v = 0
-        self.orientation = orientation % (2 * math.pi)
+        self.orientation = orientation % (2 * np.pi)
         self.st_angle = 0
 
         self.wheel_base = wheel_base
@@ -97,11 +99,10 @@ class Car(Body):
 
     def take_next_inputs(self, gas=0, brake=0, st_wheel_chg=0, input_series=None):
         ''' Takes inputs as values or reads them from a list'''
-        #acc = self.gen_acc(gas)
+        # acc = self.gen_acc(gas)
 
         if input_series:
             gas, brake, st_wheel_chg = input_series.pop(0)
-
         gas = float(gas)
         brake = float(brake)
         st_wheel_chg = float(st_wheel_chg)
@@ -111,8 +112,10 @@ class Car(Body):
         self.v_p = acc*(1-brake)
         self.st_angle_p = st_wheel_chg
 
-    def next_pos(self, pos=[0, 0], inputs=[0, 0, 0],  t_s=1):
-        ''' Returns coordinates of Car after specified timestep based on given inputs'''
+    def next_pos(self, pos=[0.0, 0.0], inputs=[0.0, 0.0, 0.0], t_s=1):
+        ''' Returns coordinates of Car after specified timestep based on given
+        inputs.
+        '''
 
         pos_x = pos[0]
         pos_y = pos[1]
@@ -128,7 +131,9 @@ class Car(Body):
         return pos_x, pos_y
 
     def get_trajectory(self, input_series, starting_pos=[0, 0], total_time=100,  t_s=1):
-        ''' Returns series of states (position and orientation) based on a series of inputs'''
+        ''' Returns series of states (position and orientation) based on a
+        series of inputs.
+        '''
 
         all_x = []
         all_y = []

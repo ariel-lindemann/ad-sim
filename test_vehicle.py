@@ -4,12 +4,12 @@ import os
 
 import vehicle
 
+
 class TestCar(unittest.TestCase):
 
     def test_car_orientation(self):
         car = vehicle.Car(orientation=math.radians(360))
         self.assertEqual(car.orientation, 0)
-
 
     def test_load_inputs_from_file(self):
         car = vehicle.Car()
@@ -44,11 +44,11 @@ class TestCar(unittest.TestCase):
 
     def test_update(self):
         inputs = [[0.75, 0.0, -30]]
-        car = vehicle.Car(orientation= 30, inputs=inputs)
+        car = vehicle.Car(orientation=30, inputs=inputs)
 
         t_s = 1
 
-        car.take_next_inputs(input_series = car.input_buffer)
+        car.take_next_inputs(input_series=car.input_buffer)
         car.update(timestep=t_s)
 
         # TODO
@@ -67,14 +67,15 @@ class TestCar(unittest.TestCase):
         t_s = 1
         car = vehicle.Car()
 
-        inputs = [0,0,0]
-        pos = [0,0]
+        inputs = [0, 0, 0]
+        pos = [0, 0]
 
-        x,y =car.next_pos(pos, inputs, t_s)
-        self.assertEqual(x,0)
-        self.assertEqual(y,0)
+        x, y = car.next_pos(pos, inputs, t_s)
+        self.assertEqual(x, 0)
+        self.assertEqual(y, 0)
 
         # TODO more general test
+
 
 if __name__ == '__main__':
     unittest.main()

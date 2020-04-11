@@ -12,7 +12,7 @@ class TestEnvironment(unittest.TestCase):
     def test_bounded_environment_init(self):
         x = [0, 100]
         y = [-50, 50]
-        
+
         benv = environment.BoundedEnvironment(x, y)
 
         self.assertEqual(benv.x_min, x[0])
