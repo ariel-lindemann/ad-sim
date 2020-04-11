@@ -38,21 +38,17 @@ def run_sim(car, options, inputs):
 
     ###
 
-    all_x, all_y, all_ori = car.get_trajectory(inputs_file, [0, 0],
-                                               TOTAL_TIME, TIMESTEP)
-
-#    car_width
+    trajectory = car.get_trajectory(inputs_file, [0, 0],
+                                    TOTAL_TIME, TIMESTEP)
 
     # TODO maybe adjust position
     car_patch = mpatches.Rectangle((0, 0), car.length,
                                    car.width, car.orientation)
     ax.add_patch(car_patch)
 
-
     def animate(i):
-        x = all_x.pop(0)
-        y = all_y.pop(0)
-        ori = all_ori.pop(0)
+
+        x, y, ori = trajectory[[0, 1, 2], [i]]
 
         # TODO pedals and steering mpatch
 

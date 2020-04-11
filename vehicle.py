@@ -57,20 +57,12 @@ class Car(Body):
         else:
             self.input_buffer = []
 
-        self.goal_state = None
-
     def adj_angles(self):
         '''Prevent angles from exceeding 2*pi or 360°.'''
         all_angles = [self.ori_p, self.st_angle_p,
                       self.orientation, self.st_angle]
         for a in all_angles:
             a = a % (2*math.pi)
-
-
-    def set_goal_state(self, goal_state):
-        self.goal_state = goal_state
-
-
 
     def load_inputs(self, file=None, in_list=None):
         ''' Load inputs either from file or from array'''
@@ -161,4 +153,5 @@ class Car(Body):
             all_y.append(pos_y)
             all_ori.append(self.orientation)
 
-        return all_x, all_y, all_ori
+        trajectory = np.array([all_x, all_y, all_ori])
+        return trajectory
