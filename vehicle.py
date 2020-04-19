@@ -160,3 +160,14 @@ class Car(Body):
 
         trajectory = np.array([all_x, all_y, all_ori])
         return trajectory
+
+    def set_state(self, state):
+        '''Set state variables. State = [x_p, y_p, ori_p, v_p]'''
+        self.x_p = state[0]
+        self.y_p = state[1]
+        self.ori_p = state[2]
+        self.v_p = state[3]
+
+    def get_state(self):
+        state = [self.x_p, self.y_p, self.ori_p, self.v_p]
+        return state
