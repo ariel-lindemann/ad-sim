@@ -6,10 +6,12 @@ import numpy as np
 from matplotlib.animation import FuncAnimation
 
 import vehicle
+import model
 
 
 def display_trajectory(car, input_series, starting_pos=[0, 0],
                        TOTAL_TIME=100,  t_s=1):
+
     all_x, all_y, = car.get_trajectory(input_series, starting_pos,
                                        TOTAL_TIME, t_s)
     plt.axes(aspect='equal')
@@ -74,4 +76,19 @@ OPTIONS['Y_BOUNDS'] = [-50, 150]
 INPUTS_FILE = 'inputs.csv'
 
 # display_trajectory(car, inputs_file, [0, 0], TOTAL_TIME, TIMESTEP)
-run_sim(car, OPTIONS, INPUTS_FILE)
+#run_sim(car, OPTIONS, INPUTS_FILE)
+
+
+# TODO MPC demo
+
+goal = [100, 100, 90]
+horizon = 5
+timestep = 0.1
+
+total_steps = 10
+
+mpc = model.MPC(car, goal, horizon, timestep)
+
+inputs = mpc.gen_inputs(total_steps)
+# TODO debug
+run_sim(car, OPTIONS, inputs)
