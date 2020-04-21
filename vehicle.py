@@ -37,7 +37,7 @@ class Car(Body):
 
     def __init__(self, dimensions=[4.95, 1.85], wheel_base=2.95, orientation=0, inputs=None):
         # TODO super-init-not-called
-        # TODO CODE QUALITY: change number of instance attributes
+        # TODO CODE QUALITY: reduce number of instance attributes
 
         self.length = dimensions[0]
         self.width = dimensions[1]
@@ -135,9 +135,9 @@ class Car(Body):
         series of inputs.
         '''
 
-        all_x = []
-        all_y = []
-        all_ori = []
+        all_x = np.zeros(total_time)
+        all_y = np.zeros(total_time)
+        all_ori = np.zeros(total_time)
 
         pos_x = starting_pos[0]
         pos_y = starting_pos[1]
@@ -148,15 +148,22 @@ class Car(Body):
 
         for i in range(total_time):
 
+            
             # FIXME IndexError: pop from empty list
             if len(input_series) >= i:  # TODO maybe > instead of >=
-                gas, brake, st_wheel_chg = input_series.pop(0)
+                
+                gas = input_series[0][0]
+                brake = input_series[0][1]
+                st_wheel_chg = input_series[0][2]
+
+                input_series = input_series[1:]
+                #gas, brake, st_wheel_chg = input_series.pop(0)
 
             pos_x, pos_y = self.next_pos([pos_x, pos_y],
                                          [gas, brake, st_wheel_chg], t_s)
-            all_x.append(pos_x)
-            all_y.append(pos_y)
-            all_ori.append(self.orientation)
+            all_x[i] = pos_x
+            all_y[i] = pos_y
+            all_ori[i] = self.orientation
 
         trajectory = np.array([all_x, all_y, all_ori])
         return trajectory
